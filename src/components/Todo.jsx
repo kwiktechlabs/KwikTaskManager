@@ -3,24 +3,16 @@ import { useState } from "react";
 const Todo = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const [editFlag, setEditFlag] = useState(null);
 
   function handleInputChange(event) {
     setNewTask(event.target.value);
   }
 
   function addNewTask() {
-    if (newTask.trim() == "") {
-      return;
+    if (newTask.trim() !== "") {
+      setTasks((t) => [...t, newTask]);
+      setNewTask("");
     }
-
-    if (editFlag != null) {
-      setTasks(tasks.map((task, idx) => (idx == editFlag ? newTask : task)));
-      setEditFlag(null);
-    } else {
-      setTasks([...tasks, newTask]);
-    }
-    setNewTask("");
   }
 
   function deleteTask(index) {
@@ -28,11 +20,7 @@ const Todo = () => {
     setTasks(updatedTasks);
   }
 
-  function editTask(index) {
-    //deleteTask(index);
-    setEditFlag(index);
-    setNewTask(tasks[index]);
-  }
+  // function editTask(index) {}
 
   function moveTaskUp(index) {
     const updatedTasks = [...tasks];
@@ -45,16 +33,7 @@ const Todo = () => {
     }
   }
 
-  function moveTaskDown(index) {
-    const updatedTasks = [...tasks];
-    if (index < tasks.length - 1) {
-      [updatedTasks[index], updatedTasks[index + 1]] = [
-        updatedTasks[index + 1],
-        updatedTasks[index],
-      ];
-      setTasks(updatedTasks);
-    }
-  }
+  function moveTaskDown(index) {}
 
   return (
     <div className="bg-gray-200 place-self-center w-11/12 max-w-md flex flex-col p-7 min-h-[550px] rounded-xl">
@@ -74,7 +53,7 @@ const Todo = () => {
           onChange={handleInputChange}
         />
         <button className="mx-2 rounded-2xl" onClick={addNewTask}>
-          {editFlag == null ? "➕" : "✅"}
+          ➕
         </button>
       </div>
       <div className="tasks"></div>
@@ -86,9 +65,9 @@ const Todo = () => {
           >
             <span>{task}</span>
             <div>
-              <button className="mx-1" onClick={() => editTask(index)}>
+              {/* <button className="mx-1" onClick={() => editTask(index)}>
                 ✏️
-              </button>
+              </button> */}
               <button className="mx-1" onClick={() => moveTaskUp(index)}>
                 ⬆️
               </button>
